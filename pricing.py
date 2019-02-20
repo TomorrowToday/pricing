@@ -65,24 +65,38 @@ def main():
     time.sleep(2) # wait for dynamic form to load
     country_options = Select(driver.find_element_by_name('country'))
     forward_options = Select(driver.find_element_by_name('userCountry'))
+    type_options = Select(driver.find_element_by_name('numberType'))
 
     # for country in price sheet
+    country = 'Anguilla'
+    forward = 'VoIP/SIP/Softphone'
+    number_type_index = 0
 
     # get cart for country
-    country_options.select_by_value('Anguilla')
-    forward_options.select_by_value('VoIP/SIP/Softphone')
+    country_options.select_by_value(country)
+    type_options.select_by_index(number_type_index)
+    forward_options.select_by_value(forward)
+
     time.sleep(2) # wait for new prices to load
+
     page = driver.execute_script("return document.documentElement.outerHTML")
     soup = BeautifulSoup(page, features='html.parser')
-    price_box = soup.find_all('div', {'class':'a4jPqxiquQKU7Gps8sGb'})
+    price_options = soup.find_all('div', {'class':'a4jPqxiquQKU7Gps8sGb'})
 
-    # for option in cart
-    for box in price_box:
-        price = box.text
-        print(f"price: {price}")
+    plans = {}
+    # for price option in cart
+    for option in price_options[:6]:
+        plan = option.find('div', {'class':'_2tWbNTe38p5RG2fxbXUY-Y'}).text
+        mrc = option.find('div', {'class':'dLIpmj8etT1Qi6XOPThm6'}).text
+        included_minutes = option.find('div', {'class':'VWds6YAFGXmeGTAXTEB8b'}).text
+        added_minutes = option.find('div', {'class':'_2lqwLdOto5DKzOnceK9XXJ'}).text
 
         # format cart option data
-
+        plans[plan.lower()] = {
+            'mrc': mrc.split()[0][1:],
+            'included_minutes':included_minutes,
+            'added_minutes': added_minutes.split()[0][1:],
+        }
 
     # find differences between price sheet and cart
 
