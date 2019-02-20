@@ -116,6 +116,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+#Mac stuff
+.DS_Store
+
 #Project Specific
 /pricing_challenge
 google_credentials.json

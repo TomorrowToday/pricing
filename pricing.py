@@ -1,12 +1,14 @@
-import pickle
 import os.path
+import pickle
 import requests
+import time
 
 from bs4 import BeautifulSoup
 from googleapiclient.discovery import build as build_service
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from selenium import webdriver
+from selenium.webdriver.support.ui import Select
 
 
 class PriceSheet():
@@ -46,24 +48,29 @@ class PriceSheet():
         pass
 
 
+
+
+
 def main():
 
     # get price sheet data
-    price_sheet = PriceSheet(id='1r0NmNwXggOne5J5voI4gLSZ2UBglEo-D3FRv6FI3b_M', range='Sheet1!A2:H').raw_values
-
-    if not price_sheet:
-        print('No data found.')
-    else:
-        print('Country, Plan, MRC, Minutes, Overrage:')
-        for row in price_sheet:
-            # Print columns A and E, which correspond to indices 0 and 4.
-            print('%s, %s, %s, %s, %s' % (row[1], row[3], row[4], row[5], row[6]))
+    # price_sheet = PriceSheet(id='1r0NmNwXggOne5J5voI4gLSZ2UBglEo-D3FRv6FI3b_M', range='Sheet1!A2:H').raw_values
 
 
     # format price sheet data
 
 
     # connect to cart
+    driver = webdriver.Chrome()
+    driver.get('http://shoppingcart-staging.avoxi.io')
+    time.sleep(5)
+    country = Select(driver.find_element_by_name('country'))
+    forward = Select(driver.find_element_by_name('userCountry'))
+
+    country.select_by_value('Anguilla')
+    forward.select_by_value('VoIP/SIP/Softphone')
+    
+    time.sleep(5)
 
     # for country in price sheet
 
