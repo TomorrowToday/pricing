@@ -50,7 +50,6 @@ class PriceSheet():
 
 
 
-
 def main():
 
     # get price sheet data
@@ -63,27 +62,33 @@ def main():
     # connect to cart
     driver = webdriver.Chrome()
     driver.get('http://shoppingcart-staging.avoxi.io')
-    time.sleep(5)
-    country = Select(driver.find_element_by_name('country'))
-    forward = Select(driver.find_element_by_name('userCountry'))
-
-    country.select_by_value('Anguilla')
-    forward.select_by_value('VoIP/SIP/Softphone')
-    
-    time.sleep(5)
+    time.sleep(2) # wait for dynamic form to load
+    country_options = Select(driver.find_element_by_name('country'))
+    forward_options = Select(driver.find_element_by_name('userCountry'))
 
     # for country in price sheet
 
-        # get cart for country
+    # get cart for country
+    country_options.select_by_value('Anguilla')
+    forward_options.select_by_value('VoIP/SIP/Softphone')
+    time.sleep(2) # wait for new prices to load
+    page = driver.execute_script("return document.documentElement.outerHTML")
+    soup = BeautifulSoup(page, features='html.parser')
+    price_box = soup.find_all('div', {'class':'a4jPqxiquQKU7Gps8sGb'})
 
-        # for option in cart
+    # for option in cart
+    for box in price_box:
+        price = box.text
+        print(f"price: {price}")
 
-            # format cart option data
+        # format cart option data
 
 
     # find differences between price sheet and cart
 
     # display/report differnces between price sheet and cart
+
+    driver.quit()
 
 if __name__ == '__main__':
     main()
