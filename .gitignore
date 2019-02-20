@@ -118,3 +118,5 @@ dmypy.json
 
 #Project Specific
 /pricing_challenge
+google_credentials.json
+google_token.pickle
